@@ -1,7 +1,15 @@
 import { Link, routes } from '@redwoodjs/router'
 import { Flash } from '@redwoodjs/web'
+import { useAuth } from '@redwoodjs/auth'
 
 const AdminLayout = ({ children }) => {
+  const { logIn, logOut, isAuthenticated, currentUser } = useAuth()
+
+  var authClick = isAuthenticated ? logOut : logIn
+  var authButtonText = isAuthenticated ? 'Log Out' : 'Log In'
+  var authButtonClass =
+    'rw-button rw-button-' + (isAuthenticated ? 'red' : 'blue')
+
   return (
     <>
       <div className="rw-scaffold">
@@ -12,6 +20,12 @@ const AdminLayout = ({ children }) => {
               MedRex
             </Link>
           </h1>
+          <div className="rw-button-group">
+            <div>{isAuthenticated && currentUser.email}</div>
+            <button className={authButtonClass} onClick={authClick}>
+              {authButtonText}
+            </button>
+          </div>
         </header>
         <main className="rw-main">{children}</main>
         <footer>
